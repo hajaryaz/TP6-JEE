@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                             http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <display-name>GestionDesProduits-SpringMVC</display-name>
+
+    <!--
+        =====================================================
+        ETAPE 1 : Chargement du contexte Spring RACINE
+        =====================================================
+        ContextLoaderListener charge spring-beans.xml au demarrage.
+        Ce contexte contient les beans DAO et Service.
+        Il est partage par toute l'application.
+    -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring-beans.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <!--
+        =====================================================
+        ETAPE 2 : Declaration du DispatcherServlet
+        =====================================================
+        Le DispatcherServlet est le "Front Controller" de Spring MVC.
+        Il intercepte toutes les requetes *.aspx et les dispatch
+        vers le bon Controller selon le @RequestMapping.
+
+        Il possede son propre contexte Spring :
+        application-servlet-config.xml (Controllers + ViewResolver)
+    -->
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/application-servlet-config.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!--
+        =====================================================
+        ETAPE 3 : Mapping des requetes
+        =====================================================
+        Toutes les requetes se terminant par .aspx
+        sont traitees par le DispatcherServlet.
+
+        Note : on utilise *.aspx ici pour rester coherent
+        avec l'exemple du cours du professeur Cherradi.
+        En production moderne, on utilise plutot : /
+    -->
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.aspx</url-pattern>
+    </servlet-mapping>
+
+    <!--
+        =====================================================
+        ETAPE 4 : Page d'accueil
+        =====================================================
+    -->
+    <welcome-file-list>
+        <welcome-file>default.aspx</welcome-file>
+    </welcome-file-list>
+
+</web-app>

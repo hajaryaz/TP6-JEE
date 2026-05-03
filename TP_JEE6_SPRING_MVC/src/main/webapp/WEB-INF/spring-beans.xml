@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!--
+        ============================================================
+        CONTEXTE RACINE SPRING - spring-beans.xml
+        ============================================================
+        Ce fichier est charge par ContextLoaderListener (web.xml).
+        Il declare les beans des couches DAO et Service.
+
+        Configuration par XML (approche classique / Spring 2.x) :
+        On declare chaque Bean manuellement et on injecte les
+        dependances avec la balise <property>.
+
+        Principe IOC :
+        Spring cree les objets et les relie entre eux.
+        Le developpeur ne fait plus : ProduitMetier m = new ProduitImplMetier();
+        C'est Spring qui instancie et injecte !
+        ============================================================
+    -->
+
+    <!--
+        Bean DAO : couche acces aux donnees.
+        init-method="init" : Spring appelle cette methode apres creation du bean.
+        Utilise pour inserer des donnees de test au demarrage.
+    -->
+    <bean id="objDAO" class="dao.ProduitImpl"/>
+
+    <!--
+        Bean Service : couche metier.
+        Injection du DAO via <property> :
+           Spring appelle setDao(objDAO) sur l'instance de ProduitImplMetier.
+        -> Le service connait le DAO sans jamais faire "new ProduitImpl()"
+    -->
+    <bean id="objServices" class="services.ProduitImplMetier">
+        <property name="dao" ref="objDAO"/>
+    </bean>
+
+</beans>
